@@ -1,0 +1,146 @@
+The "template" library in Go, found within the text/template and html/template packages, provides functionality
+for text-based and HTML-based templating, respectively. This library allows you to define templates with placeholders
+ (template actions or directives) that are later filled with data to produce the final output.
+
+text/template and html/template
+text/template: This package is primarily used for text-based templating, allowing you to define templates for generating
+ plain text output. It's not designed specifically for generating HTML.
+
+html/template: This package is specifically tailored for HTML templating. It provides the same functionality as
+text/template, but it has HTML-specific escaping to prevent Cross-Site Scripting (XSS) attacks by automatically
+escaping content where necessary.
+
+Key Concepts:
+Templates: Templates are text (or HTML) files with placeholders or actions that define the structure of the output.
+Placeholders are typically wrapped inside {{ }}.
+
+Actions/Directives: These are commands inside the template enclosed within {{ }} that control the template's behavior.
+Examples include variable insertion ({{ .VariableName }}), looping ({{ range .Items }} ... {{ end }}),
+conditional logic ({{ if .Condition }} ... {{ else }} ... {{ end }}), and function calls ({{ FuncName .Param }}).
+
+Data Structures: Go's templating system works with Go data structures (structs, maps, slices, etc.). You provide
+these data structures to the template to fill in the placeholders.
+
+Template Execution: Once a template is defined and the data is ready, you execute the template by passing the data to
+it. The template engine processes the template, substitutes the placeholders with the provided data, and produces the final output.
+
+Error Handling: Go's template library provides methods like template.Parse(), template.Must(),
+and template.Execute() to handle errors during template parsing and execution.
+
+Basic Workflow:
+Define a template with placeholders and control actions.
+Create or prepare the necessary data structures.
+Parse the template using template.New() and template.Parse() (or template.Must() for simple error handling).
+Execute the template by providing the data structures using template.Execute().
+Handle any errors returned during parsing or execution.
+Example Use Cases:
+Generating Code: Generating code snippets or files based on predefined templates with variable inputs.
+Rendering Web Pages: Creating HTML pages with dynamic content on web servers.
+Textual Output: Generating emails, reports, or any textual output that involves variable data.
+Overall, Go's template library provides a simple yet powerful way to separate logic from presentation,
+making it easier to manage and maintain complex output generation tasks. It promotes a clean separation between
+the template structure and the data used to populate it.
+
+
+/*
+While go run is commonly used in the //go:generate directive to execute Go files, you can use other commands as well.
+Here are some examples of commands that can be used with //go:generate:
+
+Executing Go files: go run, go build, go install, etc.
+
+Example: //go:generate go run myscript.go
+Running shell commands or scripts: Using shell commands directly.
+
+Example: //go:generate sh generate.sh
+Running custom scripts or executables: Executing scripts or binaries.
+
+Example: //go:generate ./my_custom_generator
+Invoking third-party code generators or tools: Triggering external code generation tools.
+
+Example: //go:generate protoc --go_out=. myfile.proto
+Running code generation tools: Invoking custom generators or tools that create code.
+
+Example: //go:generate swagger generate server -A myapp
+
+
+//go:generate, which is specifically used with go generate to execute commands for code generation,
+there are a few other commonly used directives in Go:
+
+//go:build Directive (Go 1.17 and later): It's used for build constraints to control whether a file
+should be included in the build based on the build tags or conditions.
+
+Example: //go:build linux && amd64
+//go:embed Directive (Go 1.16 and later): It's used to include files or directories into the Go binary at build time.
+
+Example: //go:embed static/*
+//go:linkname Directive: It allows the implementation of the linker to modify the visibility of symbols in
+the Go runtime. It's primarily used in unsafe situations.
+
+Example: //go:linkname runtime_nanotime runtime.nanotime
+//go:noescape Directive: It's used to inform the compiler that a function does not allow the pointers to its arguments to escape.
+
+Example: //go:noescape
+//go:noinline Directive: It instructs the compiler not to inline a specific function during optimization.
+
+Example: //go:noinline
+//go:registerparams Directive: Used to instruct the compiler to register parameters for debugging.
+
+Example: //go:registerparams
+//go:generate Directive: As mentioned earlier, it's used specifically with the go generate command to
+execute commands for code generation.
+
+//go:noescape: Informs the compiler that a function does not allow the pointers to its arguments to escape.
+
+Example: //go:noescape
+//go:noinline: Instructs the compiler not to inline a specific function during optimization.
+
+
+
+template.New("structTemplate") creates a new, empty template named "structTemplate".
+
+.Parse(structTemplate) parses the content of the structTemplate string as a template and associates it
+with the created template named "structTemplate".
+
+template.Must() ensures that the Parse operation succeeds without an error. If there's an error during parsing,
+ it will panic, stopping further execution.
+
+The tmpl variable holds a reference to the parsed template. It can be used later to execute the template by providing data.
+
+The general workflow for working with templates in Go involves creating a template using template.New(), parsing the
+ template content using methods like Parse() or ParseFiles(), handling potential errors using template.Must() for
+  convenience, and then executing the template with data using Execute() or similar methods.
+
+Templates in Go allow you to insert dynamic data into fixed text structures, making them a powerful tool for generating
+ various kinds of text-based outputs in a flexible and controlled manner.
+
+The template package in Go provides various methods and functionalities to work with templates.
+Some of the important methods available on the Template type include:
+
+Parsing Templates:
+Parse and ParseFiles: Methods for parsing template strings or files and associating them with the template.
+Parse(text string) (*Template, error): Parses the provided text as a template.
+ParseFiles(filenames ...string) (*Template, error): Parses the specified files as templates.
+Execution of Templates:
+Execute and ExecuteTemplate: Methods to execute a parsed template with specific data.
+Execute(wr io.Writer, data interface{}) error: Executes the template, writing the output to the specified writer with the provided data.
+ExecuteTemplate(wr io.Writer, name string, data interface{}) error: Executes a named template, writing the output to the writer with the provided data.
+Clone and Definition:
+Clone: Creates a copy of the template.
+
+Clone() (*Template, error): Creates a copy of the template, allowing you to modify the copy without affecting the original.
+DefinedTemplates: Retrieves a list of the defined template names.
+
+DefinedTemplates() []string: Returns a list of the names of all the defined templates associated with the template.
+Other Methods:
+New: Creates a new, empty template with the specified name.
+
+New(name string) *Template: Creates a new, empty template with the provided name.
+Option: Allows setting options for the template.
+
+Option(opt ...string): Sets options for the template, such as missingkey=error to handle missing keys as errors.
+Lookup: Retrieves a named template associated with the template.
+
+Lookup(name string) *Template: Retrieves a named template. If not found, it returns nil.
+These are some of the fundamental methods available in the template package for working with templates.
+They provide functionalities for parsing templates, executing them with data, managing template names, and more.
+The package offers additional methods and options to handle various aspects of template manipulation and

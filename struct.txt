@@ -1,0 +1,37 @@
+For Complex Data Structures: If your template requires multiple fields or a structured set of data,
+using a struct to encapsulate that data can be beneficial. It allows you to organize and pass various pieces of data
+to the template easily.
+
+When You Don't Need a Struct:
+
+For Simple Data: If your template requires only a single or a couple of values, you might directly pass
+those values instead of creating a struct.
+For Simple Text Generation: If your template doesn't need any dynamic data, you can execute it without passing any data at all.
+
+Example without Using a Struct:
+
+const simpleTemplate = `Hello, World!`
+
+func main() {
+    tmpl := template.Must(template.New("Simple").Parse(simpleTemplate))
+
+    err := tmpl.Execute(os.Stdout, nil)
+    if err != nil {
+        panic(err)
+    }
+}
+In the above example, there's no need for a struct because the template doesn't require any dynamic data.
+ It's a simple static text that doesn't change, so we execute it without passing any specific data.
+
+Example with Direct Value:
+
+const greetingTemplate = `Hello, {{.}}!`
+
+func main() {
+    tmpl := template.Must(template.New("Greeting").Parse(greetingTemplate))
+
+    err := tmpl.Execute(os.Stdout, "John")
+    if err != nil {
+        panic(err)
+    }
+}
