@@ -6,7 +6,6 @@ import (
 	"os"
 )
 
-//go:generate go run gen1.go
 const newMainfile = `
 package main
 
